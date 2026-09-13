@@ -1,0 +1,10 @@
+{
+  "id": "rust",
+  "surfaces": ["js"],
+  "options": {
+    "crateName": "tsts_rust",
+    "edition": "2024",
+    "foundation": "std",
+    "outputType": "bin"
+  }
+}

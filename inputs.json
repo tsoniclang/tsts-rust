@@ -1,0 +1,14 @@
+{
+  "gotots": {
+    "root": "../gotots",
+    "revision": "0394c6109afba736bcda3f684293df84c7382093"
+  },
+  "tsts": {
+    "root": "../tsts",
+    "revision": "6f33a9b9d1ef73d7571e951d41192dca85c4d28d"
+  },
+  "typescriptGo": {
+    "root": "../tsts/vendor/typescript-go",
+    "revision": "c78d39e7075b4fc641b12b1f35d905c54cdc13ef"
+  }
+}

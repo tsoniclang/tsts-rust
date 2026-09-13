@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 4,
+  "distribution": { "root": "../../../../gotots" },
+  "source": { "root": ".", "package": ".", "mode": "exported" },
+  "go": { "goos": "linux", "goarch": "amd64", "cgo": false, "tags": [] },
+  "semantics": { "integers": "fixed64-bigint", "evaluationOrder": "direct" },
+  "providers": { "standardLibrary": false, "externals": false },
+  "implementations": { "packages": [], "callables": [] },
+  "output": { "directory": "../../../.temp/pointer/canonical" }
+}

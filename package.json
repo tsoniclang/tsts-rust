@@ -1,0 +1,23 @@
+{
+  "name": "@tsoniclang/tsts-rust",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/assembly/*.test.mjs",
+    "consume": "bash scripts/run-guarded.sh node scripts/consume.mjs",
+    "stage:fixture": "node scripts/stage-shared-fixture.mjs",
+    "check:shared": "node scripts/check-shared-fixtures.mjs"
+  },
+  "devDependencies": {
+    "@gotots/abi": "file:../gotots/abi",
+    "@tsonic/host": "file:../tsonic/packages/host",
+    "@tsonic/js-source-profile": "file:../tsonic/packages/js-source-profile",
+    "@tsonic/rust-js": "file:../rust-js",
+    "@tsonic/rust-runtime": "file:../rust-runtime",
+    "@tsonic/source-core": "file:../tsonic/packages/source-core",
+    "@tsonic/target-api": "file:../tsonic/packages/target-api",
+    "@tsonic/target-rust": "file:../tsonic-rust",
+    "@tsonic/tsts": "file:../tsonic/packages/tsts"
+  }
+}
