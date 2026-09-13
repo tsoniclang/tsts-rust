@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "bash scripts/run-guarded.sh node scripts/build.mjs",
     "test": "node --test test/assembly/*.test.mjs",
     "consume": "bash scripts/run-guarded.sh node scripts/consume.mjs",
     "stage:fixture": "node scripts/stage-shared-fixture.mjs",
@@ -11,9 +12,12 @@
   },
   "devDependencies": {
     "@gotots/abi": "file:../gotots/abi",
+    "@gotots/externals": "file:../gotots/externals",
+    "@gotots/gostdlib": "file:../gotots/gostdlib",
     "@tsonic/host": "file:../tsonic/packages/host",
     "@tsonic/js-source-profile": "file:../tsonic/packages/js-source-profile",
     "@tsonic/rust-js": "file:../rust-js",
+    "@tsonic/rust-nodejs": "file:../rust-nodejs",
     "@tsonic/rust-runtime": "file:../rust-runtime",
     "@tsonic/source-core": "file:../tsonic/packages/source-core",
     "@tsonic/target-api": "file:../tsonic/packages/target-api",

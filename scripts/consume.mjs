@@ -4,8 +4,10 @@ import { fileURLToPath } from "node:url";
 import { compileProject } from "@tsonic/host";
 import { createTargetRegistry } from "@tsonic/target-api";
 import { createRustTargetPack } from "@tsonic/target-rust";
+import { createRustNodejsCapability } from "@tsonic/rust-nodejs";
 import { createGoAbiCapability } from "@gotots/abi";
 import { createScratchRun, ownedPath, stageCanonicalInput } from "./canonical-input.mjs";
+import { stageProviderSourcePackage } from "./provider-sources.mjs";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const [canonical, runner, output] = process.argv.slice(2);
@@ -17,6 +19,15 @@ const sourceRoot = resolve(runRoot, "source");
 await mkdir(sourceRoot);
 const input = await stageCanonicalInput(resolve(canonical), sourceRoot);
 await writeFile(resolve(runRoot, "input.json"), JSON.stringify(input, null, 2) + "\n");
+const packageContract = JSON.parse(await readFile(resolve(sourceRoot, "package.json"), "utf8"));
+const providerSelections = JSON.parse(await readFile(resolve(repositoryRoot, "provider-sources.json"), "utf8"));
+const providerInputs = [];
+for (const selection of providerSelections) {
+  if (packageContract.dependencies?.[selection.name] === undefined) continue;
+  const packageRoot = dirname(fileURLToPath(import.meta.resolve(`${selection.name}/package.json`)));
+  providerInputs.push(await stageProviderSourcePackage(packageRoot, sourceRoot, selection));
+}
+await writeFile(resolve(runRoot, "provider-inputs.json"), JSON.stringify(providerInputs, null, 2) + "\n");
 await writeFile(resolve(sourceRoot, "runner.ts"), await readFile(resolve(runner)), { flag: "wx" });
 const target = JSON.parse(await readFile(resolve(repositoryRoot, "rust-target.json"), "utf8"));
 if (target.id !== "rust") throw new Error("This product must select the Rust target");
@@ -31,11 +42,12 @@ const project = {
 const projectFilePath = resolve(sourceRoot, "tsonic.json");
 await writeFile(projectFilePath, JSON.stringify(project, null, 2) + "\n");
 const started = performance.now();
+console.log(`Checking ${input.rootFiles.length} canonical files and ${providerInputs.length} source provider packages.`);
 const result = compileProject({
   project,
   projectFilePath,
   registry: createTargetRegistry([createRustTargetPack()]),
-  installedCapabilities: [createGoAbiCapability("rust")],
+  installedCapabilities: [createGoAbiCapability("rust"), createRustNodejsCapability()],
 });
 await writeFile(resolve(runRoot, "diagnostics.json"), JSON.stringify(result.diagnostics, null, 2) + "\n");
 const errors = result.diagnostics.filter(diagnostic => diagnostic.category === "error");

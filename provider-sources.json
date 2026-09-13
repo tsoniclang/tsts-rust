@@ -1,0 +1,12 @@
+[
+  {
+    "name": "@gotots/gostdlib",
+    "sourceDirectory": "src",
+    "declarationDirectory": "dist/src"
+  },
+  {
+    "name": "@gotots/externals",
+    "sourceDirectory": "src",
+    "declarationDirectory": "dist/src"
+  }
+]
