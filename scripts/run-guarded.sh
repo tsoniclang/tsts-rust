@@ -20,7 +20,7 @@ systemd-run --user --scope --quiet --unit "tsts-rust-$run_id" \
   /usr/bin/time --verbose --output "$record.time" \
   timeout --signal=TERM --kill-after=15s 5m \
   env NODE_OPTIONS=--max-old-space-size=4096 GOMEMLIMIT=2GiB GOMAXPROCS=2 \
-  CARGO_BUILD_JOBS=2 "$@"
+  CARGO_BUILD_JOBS=2 "$@" 9>&-
 status=$?
 set -e
 printf 'exit_status=%s\n' "$status" >"$record.finished"
