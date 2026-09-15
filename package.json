@@ -8,7 +8,8 @@
     "test": "node --test test/assembly/*.test.mjs",
     "consume": "bash scripts/run-guarded.sh node scripts/consume.mjs",
     "stage:fixture": "node scripts/stage-shared-fixture.mjs",
-    "check:shared": "node scripts/check-shared-fixtures.mjs"
+    "check:shared": "node scripts/check-shared-fixtures.mjs",
+    "check:compiler": "bash scripts/run-guarded.sh node scripts/check-compiler.mjs"
   },
   "devDependencies": {
     "@gotots/abi": "file:../gotots/abi",

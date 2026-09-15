@@ -21,10 +21,11 @@ acceptance cases, not identical implementation files.
 This repository is an integration bootstrap, **not yet a working native TS-Go
 compiler**. Direct GoToTS scalar output and a neutral pointer allocation,
 identity, load/store program compile to Rust and execute successfully. The
-shared scalar-pointer, array-storage and memory-view corpus currently fails
-Rust source checking. Its generated helpers require `BigInt(...)`,
-`globalThis.BigInt(...)`, `Object.freeze(...)`, and length-form
-`new Array<T>(length)` contracts missing from the selected Rust source profile.
+original `BigInt(...)`, `Object.freeze(...)`, and length-form `new Array<T>(length)`
+source-profile gaps have been implemented. Full canonical compiler source now
+passes shared checking. Rust declaration/operation closure, native compilation
+and executable compiler parity remain separate acceptance gates; shared checking
+alone is not a working native compiler.
 
 No declarations are injected, no generated code is patched, and no failure is
 classified as successful compilation. Full-product provider selection,
@@ -113,3 +114,28 @@ Resource-intensive commands run serially under a 6 GiB kernel memory ceiling,
 zero swap, a five-minute timeout, two Go/Cargo workers and a 4 GiB Node heap.
 This is the small-proof budget, not permission to run a full product under an
 unmeasured resource policy. Logs and failed artifacts remain under `.temp/`.
+
+## Native compiler acceptance
+
+After the complete product builds, compare its executable with a native TS-Go
+binary built from the selected `typescriptGo` revision in `inputs.json`:
+
+```sh
+TSTS_RUST_MEMORY_MIB=16384 TSTS_RUST_TIMEOUT_SECONDS=900 \
+  npm run check:compiler -- /path/to/native-tsgo \
+  .temp/compiler-run/output/target/debug/tsts_rust .temp/compiler-acceptance
+```
+
+The run directory must be new. The command executes the reference and product
+serially on the same authored fixtures. It compares exit status, diagnostics and
+every emitted file, covering successful compilation, bigint/Unicode literals,
+cross-file imports, syntax errors and semantic errors. It records executable
+hashes, per-invocation output and a combined `report.json`, then fails if any
+case differs. The reference must also satisfy the fixture's expected outcome;
+two executions that both fail to compile valid source cannot pass.
+
+These focused cases supply minimal explicit `noLib` declarations. Passing them
+does not certify default-library discovery, language-server operation, the full
+TS-Go fixture corpus or the broader native-target regression suites. Preserve
+the reference build command and selected source revision alongside the report;
+executable hashes alone do not establish source provenance.
